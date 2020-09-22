@@ -1,0 +1,29 @@
+version: "3"
+services:
+  hub:
+    image: selenium/hub:3.14
+    ports:
+      - "4444:4444"
+  chrome:
+    image: selenium/node-chrome:3.14
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  firefox:
+    image: selenium/node-firefox:3.14
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  search:
+    image: praj/sel
+    depends_on :
+        - chrome
+        - firefox
+    environment:
+        - BROWSER=chrome
+        - HUB_HOST=hub
+        - mod=testng.xml
+    volumes:
+        - //d/output:/usr/share/images/test-output
